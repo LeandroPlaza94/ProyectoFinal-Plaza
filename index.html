@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
 </head>
 <body>
-  
-  <script src="index.js"></script>
+    <div class="item">
+        <p>Comida: Hamburguesa</p>
+        <p>Precio: $5.99</p>
+        <button class="sumarBtn">+</button>
+        <input type="text" class="cantidadElement" value="0">
+        <button class="restarBtn">-</button>
+        <button class="agregarCarritoBtn">Agregar al carrito</button>
+    </div>
+    <div class="item">
+        <p>Comida: Pizza</p>
+        <p>Precio: $7.99</p>
+        <button class="sumarBtn">+</button>
+        <input type="text" class="cantidadElement" value="0">
+        <button class="restarBtn">-</button>
+        <button class="agregarCarritoBtn">Agregar al carrito</button>
+    </div>
+    <div class="item">
+        <p>Comida: Taco</p>
+        <p>Precio: $2.99</p>
+        <button class="sumarBtn">+</button>
+        <input type="text" class="cantidadElement" value="0">
+        <button class="restarBtn">-</button>
+        <button class="agregarCarritoBtn">Agregar al carrito</button>
+    </div>
+
+    <h2>Carrito de Compras</h2>
+    <ul id="itemsCarrito">
+        <!-- Los elementos seleccionados se agregarán aquí -->
+    </ul>
+    <p>Total: $<input type="text" id="totalCompra" value="0.00"></p>
+
+    <input type="radio" id="pagoEfectivo" name="tipoPago" value="efectivo" checked>
+    <label for="pagoEfectivo">Pago en efectivo</label>
+
+    <input type="radio" id="pagoTarjeta" name="tipoPago" value="tarjeta">
+    <label for="pagoTarjeta">Pago con tarjeta (10% recargo)</label>
+
+    <script src="index.js"></script>
 </body>
 </html>

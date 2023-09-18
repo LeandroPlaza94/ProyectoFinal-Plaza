@@ -1,46 +1,58 @@
+// Obtener elementos de comida y agregar eventos
+const items = document.querySelectorAll('.item');
+const itemsCarritoElement = document.getElementById("itemsCarrito");
+const totalCompraElement = document.getElementById("totalCompra");
+const tipoPagoEfectivo = document.getElementById("pagoEfectivo");
+const tipoPagoTarjeta = document.getElementById("pagoTarjeta");
 
-const burguerCh = 12.5;
-const burguerCl = 7.5;
-const burguerVe = 8.5;
-let cantidad = 0;
-let algoMas = 1;
-let total = 0;
-function sumarProductos(cantidad, precioUnitario) {
-	return cantidad * precioUnitario;
+let totalCompra = 0;
+
+// Función para actualizar el total
+function actualizarTotal() {
+    if (tipoPagoEfectivo.checked) {
+        totalCompraElement.value = totalCompra.toFixed(2);
+    } else if (tipoPagoTarjeta.checked) {
+        const totalConRecargo = totalCompra * 1.1; // Aplicar un recargo del 10%
+        totalCompraElement.value = totalConRecargo.toFixed(2);
+    }
 }
 
-alert("Bienvenido a Burger Company. Elija un producto para agregar al carrito:");
+items.forEach(item => {
+    const precio = parseFloat(item.querySelector('p:nth-child(2)').textContent.split("$")[1]);
 
-do {
-	const menu = parseInt(
-		prompt(
-			"1: Hamburguesa Cheddar y bacon - 12.50 USD\n" +
-				"2: Hamburguesa clásica - 7.50 USD\n" +
-				"3: Hamburguesa Veggie - 8.50 USD\n" +
-				"Ingrese el número de su elección:",
-		),
-	);
+    const sumarBtn = item.querySelector('.sumarBtn');
+    const restarBtn = item.querySelector('.restarBtn');
+    const agregarCarritoBtn = item.querySelector('.agregarCarritoBtn');
+    const cantidadElement = item.querySelector('.cantidadElement');
 
-	if (menu === 1 || menu === 2 || menu === 3) {
-		cantidad = parseInt(prompt("¿Cuántas hamburguesas desea?"));
+    let cantidad = 0;
 
-		let precioTotal = 0;
-    
+    sumarBtn.addEventListener("click", () => {
+        cantidad++;
+        cantidadElement.value = cantidad;
+    });
 
-		if (menu === 1) {
-			precioTotal = sumarProductos(cantidad, burguerCh);
-		} else if (menu === 2) {
-			precioTotal = sumarProductos(cantidad, burguerCl);
-		} else if (menu === 3) {
-			precioTotal = sumarProductos(cantidad, burguerVe);
-		}
-		total += precioTotal;
-		alert("El precio total es: " + precioTotal + " USD");
-	} else {
-		alert("Opción no válida. Por favor, elija una opción del menú.");
-	}
+    restarBtn.addEventListener("click", () => {
+        if (cantidad > 0) {
+            cantidad--;
+            cantidadElement.value = cantidad;
+        }
+    });
 
-	algoMas = parseInt(prompt("¿Desea agregar algo más? (1 = sí, 2 = no)"));
-} while (algoMas === 1);
+    agregarCarritoBtn.addEventListener("click", () => {
+        if (cantidad > 0) {
+            const comida = item.querySelector('p:nth-child(1)').textContent.split(": ")[1];
+            const listItem = document.createElement("li");
+            listItem.textContent = `${cantidad} ${comida}(s) - $${(precio * cantidad).toFixed(2)}`;
+            itemsCarritoElement.appendChild(listItem);
 
-alert(`Su compra es de USD${total}`);
+            // Actualizar el total al agregar al carrito
+            totalCompra += precio * cantidad;
+            actualizarTotal();
+        }
+    });
+});
+
+// Actualizar el total cuando cambia la opción de pago
+tipoPagoEfectivo.addEventListener("change", actualizarTotal);
+tipoPagoTarjeta.addEventListener("change", actualizarTotal);
