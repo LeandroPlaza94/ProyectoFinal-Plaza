@@ -4,47 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras</title>
+<link rel="stylesheet" href="./css/index.css">
 </head>
-<body>
-    <!-- HTML para agregar productos al carrito -->
-    <div class="item">
-        <p>Comida: Hamburguesa Clásica</p>
-        <p>Precio: $5.99</p>
-        <button class="sumarBtn">+</button>
-        <input type="text" class="cantidadElement" value="0">
-        <button class="restarBtn">-</button>
-        <button class="agregarCarritoBtn">Agregar al carrito</button>
-    </div>
+<header>
+<nav><a href="">Sobre nosotros</a>
+     <a href="">Contacto</a>
+</nav>
+</header>
+<main>
+    <h1>Only Burgers</h1>
+    <body>
+        <!-- HTML para agregar productos al carrito -->
+        <div class="item">
+            <p>Comida: Hamburguesa Clásica</p>
 
-    <div class="item">
-        <p>Comida: Hamburguesa BBQ</p>
-        <p>Precio: $6.99</p>
-        <button class="sumarBtn">+</button>
-        <input type="text" class="cantidadElement" value="0">
-        <button class="restarBtn">-</button>
-        <button class="agregarCarritoBtn">Agregar al carrito</button>
-    </div>
+            <p>Precio: $5.99</p>
+            <button class="sumarBtn">+</button>
+            <input type="text" class="cantidadElement" value="0">
+            <button class="restarBtn">-</button>
+            <button class="agregarCarritoBtn">Agregar al carrito</button>
+        </div>
+        <img src="https://img.freepik.com/foto-gratis/sabrosa-hamburguesa-aislada-sobre-fondo-blanco-comida-rapida-hamburguesa-fresca-carne-queso_90220-1063.jpg?w=740&t=st=1696337520~exp=1696338120~hmac=74eaff33850f623f37a909e14dce380fa0faf61f68718f6f064d43f3bc766c3e" alt="Burger clasica">
+    
+        <div class="item">
+            <p>Comida: Hamburguesa BBQ</p>
+            <p>Precio: $6.99</p>
+            <button class="sumarBtn">+</button>
+            <input type="text" class="cantidadElement" value="0">
+            <button class="restarBtn">-</button>
+            <button class="agregarCarritoBtn">Agregar al carrito</button>
+        </div>
+        <img src="https://img.freepik.com/foto-gratis/vista-frontal-hamburguesa-stand_141793-15542.jpg?w=1060&t=st=1696337598~exp=1696338198~hmac=a91968906a1a3750507613457185e8c29bbac172ac200c18e2b2555875599b52" alt="Burger BBQ">
 
-    <div class="item">
-        <p>Comida: Hamburguesa Vegana</p>
-        <p>Precio: $7.49</p>
-        <button class="sumarBtn">+</button>
-        <input type="text" class="cantidadElement" value="0">
-        <button class="restarBtn">-</button>
-        <button class="agregarCarritoBtn">Agregar al carrito</button>
-    </div>
+        <div class="item">
+            <p>Comida: Hamburguesa Vegana</p>
+            <p>Precio: $7.49</p>
+            <button class="sumarBtn">+</button>
+            <input type="text" class="cantidadElement" value="0">
+            <button class="restarBtn">-</button>
+            <button class="agregarCarritoBtn">Agregar al carrito</button>
+        </div>
+        <img src="https://img.freepik.com/foto-gratis/hamburguesa-vegetariana-primer-plano-tabla-cortar_23-2148784533.jpg?w=826&t=st=1696337626~exp=1696338226~hmac=18dd5fdd6ec05c02eaa7a2ea53626e843e46182b56aaa26910146934ad387da6" alt="Burger Veggie">
 
-    <h2>Carrito de Compras</h2>
-    <ul id="itemsCarrito">
-        <!-- Los elementos seleccionados se agregarán aquí -->
-    </ul>
-    <p>Total: $<span id="totalCompra">0.00</span></p>
+        <h2>Carrito de Compras</h2>
+        <ul id="itemsCarrito">
+            <!-- Los elementos seleccionados se agregarán aquí -->
+        </ul>
+        <p>Total: $<span id="totalCompra">0.00</span></p>
+    
+    <!-- Botón "Finalizar Compra" -->
+    <button id="finalizarCompraBtn">Finalizar Compra</button>
+    
+    
+        <!-- JavaScript -->
+        <script src="index.js"></script>
+    </body>
+</main>
 
-<!-- Botón "Finalizar Compra" -->
-<button id="finalizarCompraBtn">Finalizar Compra</button>
-
-
-    <!-- JavaScript -->
-    <script src="index.js"></script>
-</body>
 </html>
