@@ -6,15 +6,16 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     const productosContainer = document.getElementById("productosContainer");
-    const itemsCarritoElement = document.getElementById("itemsCarrito"); // Definición de itemsCarritoElement
+    const itemsCarritoElement = document.getElementById("itemsCarrito");
+    const totalCompraElement = document.getElementById("totalCompra");
+
+    let totalCompra = 0; // Inicializar el totalCompra en 0
+    let cantidadTotalItems = 0;
 
     productos.forEach(producto => {
         const productoElement = crearProductoElement(producto);
         productosContainer.appendChild(productoElement);
     });
-
-    let totalCompra = 0;
-    let cantidadTotalItems = 0;
 
     function crearProductoElement(producto) {
         const div = document.createElement("div");
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 listItem.appendChild(cantidadItem);
                 itemsCarritoElement.appendChild(listItem);
 
-                totalCompra += producto.precio * cantidad;
+                totalCompra += producto.precio * cantidad; // Actualizar totalCompra aquí
                 cantidadTotalItems += cantidad;
                 actualizarTotal();
                 cantidadInput.value = "0";
