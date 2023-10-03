@@ -1,30 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras</title>
 </head>
 <body>
+    <!-- HTML para agregar productos al carrito -->
     <div class="item">
-        <p>Comida: Hamburguesa</p>
+        <p>Comida: Hamburguesa Clásica</p>
         <p>Precio: $5.99</p>
         <button class="sumarBtn">+</button>
         <input type="text" class="cantidadElement" value="0">
         <button class="restarBtn">-</button>
         <button class="agregarCarritoBtn">Agregar al carrito</button>
     </div>
+
     <div class="item">
-        <p>Comida: Pizza</p>
-        <p>Precio: $7.99</p>
+        <p>Comida: Hamburguesa BBQ</p>
+        <p>Precio: $6.99</p>
         <button class="sumarBtn">+</button>
         <input type="text" class="cantidadElement" value="0">
         <button class="restarBtn">-</button>
         <button class="agregarCarritoBtn">Agregar al carrito</button>
     </div>
+
     <div class="item">
-        <p>Comida: Taco</p>
-        <p>Precio: $2.99</p>
+        <p>Comida: Hamburguesa Vegana</p>
+        <p>Precio: $7.49</p>
         <button class="sumarBtn">+</button>
         <input type="text" class="cantidadElement" value="0">
         <button class="restarBtn">-</button>
@@ -35,14 +38,13 @@
     <ul id="itemsCarrito">
         <!-- Los elementos seleccionados se agregarán aquí -->
     </ul>
-    <p>Total: $<input type="text" id="totalCompra" value="0.00"></p>
+    <p>Total: $<span id="totalCompra">0.00</span></p>
 
-    <input type="radio" id="pagoEfectivo" name="tipoPago" value="efectivo" checked>
-    <label for="pagoEfectivo">Pago en efectivo</label>
+<!-- Botón "Finalizar Compra" -->
+<button id="finalizarCompraBtn">Finalizar Compra</button>
 
-    <input type="radio" id="pagoTarjeta" name="tipoPago" value="tarjeta">
-    <label for="pagoTarjeta">Pago con tarjeta (10% recargo)</label>
 
+    <!-- JavaScript -->
     <script src="index.js"></script>
 </body>
 </html>
