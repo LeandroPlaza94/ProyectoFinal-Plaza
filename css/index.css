@@ -12,3 +12,9 @@ img{
     height: 18.75rem;
 }
 
+header a{
+    color: white;
+}
+header{
+    background-color: black;
+}

@@ -1,119 +1,115 @@
-// Obtener elementos de comida y agregar eventos
-const items = document.querySelectorAll('.item');
-const itemsCarritoElement = document.getElementById("itemsCarrito");
-const totalCompraElement = document.getElementById("totalCompra");
+document.addEventListener("DOMContentLoaded", () => {
+    const productos = [
+        { nombre: "Hamburguesa Clásica", precio: 5.99, imagen: "URL_de_la_imagen_1.jpg" },
+        { nombre: "Hamburguesa BBQ", precio: 6.99, imagen: "URL_de_la_imagen_2.jpg" },
+        { nombre: "Hamburguesa Vegana", precio: 7.49, imagen: "URL_de_la_imagen_3.jpg" }
+    ];
 
-let totalCompra = 0;
+    const productosContainer = document.getElementById("productosContainer");
+    const itemsCarritoElement = document.getElementById("itemsCarrito"); // Definición de itemsCarritoElement
 
-items.forEach(item => {
-    const precio = parseFloat(item.querySelector('p:nth-child(2)').textContent.split("$")[1]);
-    const sumarBtn = item.querySelector('.sumarBtn');
-    const restarBtn = item.querySelector('.restarBtn');
-    const agregarCarritoBtn = item.querySelector('.agregarCarritoBtn');
-    const cantidadElement = item.querySelector('.cantidadElement');
-    let cantidad = 0;
-
-    sumarBtn.addEventListener("click", () => {
-        cantidad++;
-        cantidadElement.value = cantidad;
+    productos.forEach(producto => {
+        const productoElement = crearProductoElement(producto);
+        productosContainer.appendChild(productoElement);
     });
 
-    restarBtn.addEventListener("click", () => {
-        if (cantidad > 0) {
-            cantidad--;
-            cantidadElement.value = cantidad;
-        }
-    });
+    let totalCompra = 0;
+    let cantidadTotalItems = 0;
 
-    agregarCarritoBtn.addEventListener("click", () => {
-        if (cantidad > 0) {
-            const comida = item.querySelector('p:nth-child(1)').textContent.split(": ")[1];
-            const listItem = document.createElement("li");
-            const cantidadItem = document.createElement("span");
-            cantidadItem.textContent = `${cantidad} ${comida}(s) - $${(precio * cantidad).toFixed(2)}`;
-            
-            // Botones para modificar la cantidad en el carrito
-            const aumentarCantidadBtn = document.createElement("button");
-            aumentarCantidadBtn.textContent = "+";
-            const disminuirCantidadBtn = document.createElement("button");
-            disminuirCantidadBtn.textContent = "-";
+    function crearProductoElement(producto) {
+        const div = document.createElement("div");
+        div.classList.add("item");
 
-            // Eventos para aumentar y disminuir la cantidad en el carrito
-            aumentarCantidadBtn.addEventListener("click", () => {
-                cantidad++;
-                cantidadElement.value = cantidad;
-                cantidadItem.textContent = `${cantidad} ${comida}(s) - $${(precio * cantidad).toFixed(2)}`;
-                totalCompra = calcularTotalCompra();
+        div.style.backgroundImage = `url('${producto.imagen}')`;
+
+        const nombreP = document.createElement("p");
+        nombreP.textContent = `Comida: ${producto.nombre}`;
+
+        const precioP = document.createElement("p");
+        precioP.textContent = `Precio: $${producto.precio.toFixed(2)}`;
+
+        const sumarBtn = document.createElement("button");
+        sumarBtn.textContent = "+";
+
+        const cantidadInput = document.createElement("input");
+        cantidadInput.type = "text";
+        cantidadInput.classList.add("cantidadElement");
+        cantidadInput.value = "0";
+
+        const restarBtn = document.createElement("button");
+        restarBtn.textContent = "-";
+
+        const agregarCarritoBtn = document.createElement("button");
+        agregarCarritoBtn.textContent = "Agregar al carrito";
+
+        div.appendChild(nombreP);
+        div.appendChild(precioP);
+        div.appendChild(sumarBtn);
+        div.appendChild(cantidadInput);
+        div.appendChild(restarBtn);
+        div.appendChild(agregarCarritoBtn);
+
+        sumarBtn.addEventListener("click", () => {
+            cantidadInput.value = parseInt(cantidadInput.value) + 1;
+        });
+
+        restarBtn.addEventListener("click", () => {
+            const cantidad = parseInt(cantidadInput.value);
+            if (cantidad > 0) {
+                cantidadInput.value = cantidad - 1;
+            }
+        });
+
+        agregarCarritoBtn.addEventListener("click", () => {
+            const cantidad = parseInt(cantidadInput.value);
+            if (cantidad > 0) {
+                const comida = producto.nombre;
+                const listItem = document.createElement("li");
+                const cantidadItem = document.createElement("span");
+                cantidadItem.textContent = `${cantidad} ${comida}(s) - $${(producto.precio * cantidad).toFixed(2)}`;
+
+                listItem.appendChild(cantidadItem);
+                itemsCarritoElement.appendChild(listItem);
+
+                totalCompra += producto.precio * cantidad;
+                cantidadTotalItems += cantidad;
                 actualizarTotal();
-            });
+                cantidadInput.value = "0";
+            }
+        });
 
-            disminuirCantidadBtn.addEventListener("click", () => {
-                if (cantidad > 1) {
-                    cantidad--;
-                    cantidadElement.value = cantidad;
-                    cantidadItem.textContent = `${cantidad} ${comida}(s) - $${(precio * cantidad).toFixed(2)}`;
-                    totalCompra = calcularTotalCompra();
-                    actualizarTotal();
-                }
-            });
+        return div;
+    }
 
-            listItem.appendChild(cantidadItem);
-            listItem.appendChild(aumentarCantidadBtn);
-            listItem.appendChild(disminuirCantidadBtn);
-            itemsCarritoElement.appendChild(listItem);
+    function actualizarTotal() {
+        totalCompraElement.textContent = totalCompra.toFixed(2);
+    }
 
-            totalCompra += precio * cantidad;
-            actualizarTotal();
-            cantidadElement.value = 0;
+    const finalizarCompraBtn = document.getElementById("finalizarCompraBtn");
+    finalizarCompraBtn.addEventListener("click", () => {
+        let descuento = 0;
+        if (cantidadTotalItems > 10) {
+            descuento = totalCompra * 0.05;
         }
+
+        const resumenCompra = obtenerResumenCompra();
+        const totalConDescuento = totalCompra - descuento;
+        const ventanaEmergente = window.open("", "Resumen de Compra", "width=400,height=300");
+        ventanaEmergente.document.write("<h1>Resumen de Compra</h1>");
+        ventanaEmergente.document.write(resumenCompra);
+        ventanaEmergente.document.write(`<p>Descuento: $${descuento.toFixed(2)}</p>`);
+        ventanaEmergente.document.write(`<p>Total con Descuento: $${totalConDescuento.toFixed(2)}</p>`);
+        ventanaEmergente.document.close();
     });
+
+    function obtenerResumenCompra() {
+        const itemsCarrito = itemsCarritoElement.querySelectorAll("li");
+        let resumen = "Resumen de Compra:\n\n";
+        itemsCarrito.forEach(item => {
+            const textoItem = item.textContent.replace(/\+|\-/g, "");
+            resumen += `${textoItem}\n`;
+        });
+        resumen += `\nTotal: $${totalCompra.toFixed(2)}`;
+        return resumen;
+    }
 });
-
-// Función para calcular el total de la compra
-function calcularTotalCompra() {
-    let total = 0;
-    const itemsCarrito = itemsCarritoElement.querySelectorAll("li");
-    itemsCarrito.forEach(item => {
-        const precio = parseFloat(item.textContent.split("$")[1]);
-        total += precio;
-    });
-    return total;
-}
-
-// Función para actualizar el total en la interfaz
-function actualizarTotal() {
-    totalCompraElement.textContent = totalCompra.toFixed(2);
-}
-
-// Obtén el botón "Finalizar Compra"
-const finalizarCompraBtn = document.getElementById("finalizarCompraBtn");
-
-// Maneja el clic en el botón "Finalizar Compra"
-finalizarCompraBtn.addEventListener("click", () => {
-    // Crea una ventana emergente con el resumen de la compra
-    const resumenCompra = obtenerResumenCompra();
-    const ventanaEmergente = window.open("", "Resumen de Compra", "width=400,height=300");
-    ventanaEmergente.document.write("<h1>Resumen de Compra</h1>");
-    ventanaEmergente.document.write(resumenCompra);
-    ventanaEmergente.document.close();
-});
-
-// Función para obtener el resumen de compra
-function obtenerResumenCompra() {
-    const itemsCarrito = itemsCarritoElement.querySelectorAll("li");
-    let resumen = "Resumen de Compra:\n\n";
-    let total = 0;
-
-    itemsCarrito.forEach(item => {
-        const textoItem = item.textContent.replace(/\+|\-/g, ""); // Elimina + y -
-        const precioItem = parseFloat(textoItem.split("$")[1]);
-        total += precioItem;
-        resumen += `${textoItem}\n`;
-    });
-
-    resumen += `\nTotal: $${total.toFixed(2)}`;
-    return resumen;
-}
-
-
-
