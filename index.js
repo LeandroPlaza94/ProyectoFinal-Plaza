@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "nombre": "Hamburguesa Vegana",
             "precio": 7.49,
             "imagen": "https://images.pexels.com/photos/6546021/pexels-photo-6546021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true
+            "disponible": false
         },
         {
             "nombre": "Papas cheddar-bacon",
