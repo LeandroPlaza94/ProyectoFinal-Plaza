@@ -8,8 +8,8 @@ html{
 }
 
 img{
-    width: 18.75rem;
-    height: 18.75rem;
+    width: 12.5rem;
+    height: 12.5rem;
 }
 
 header a{
@@ -17,4 +17,9 @@ header a{
 }
 header{
     background-color: black;
+}
+
+.productosContainer{
+    align-items: center;
+    justify-content: center;
 }

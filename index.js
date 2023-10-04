@@ -1,16 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
     const productos = [
-        { nombre: "Hamburguesa Clásica", precio: 5.99, imagen: "URL_de_la_imagen_1.jpg" },
-        { nombre: "Hamburguesa BBQ", precio: 6.99, imagen: "URL_de_la_imagen_2.jpg" },
-        { nombre: "Hamburguesa Vegana", precio: 7.49, imagen: "URL_de_la_imagen_3.jpg" }
+        { nombre: "Hamburguesa Clásica", precio: 5.99, imagen: "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1", disponible: true },
+        { nombre: "Hamburguesa BBQ", precio: 6.99, imagen: "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1", disponible: true },
+        { nombre: "Hamburguesa Vegana", precio: 7.49, imagen: "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1", disponible: true }
     ];
 
     const productosContainer = document.getElementById("productosContainer");
     const itemsCarritoElement = document.getElementById("itemsCarrito");
     const totalCompraElement = document.getElementById("totalCompra");
+    const metodoPagoSelect = document.getElementById("metodoPago");
 
     let totalCompra = 0;
     let cantidadTotalItems = 0;
+
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    function guardarCarritoEnLocalStorage() {
+        localStorage.setItem("carrito", JSON.stringify(carrito));
+    }
 
     productos.forEach(producto => {
         const productoElement = crearProductoElement(producto);
@@ -21,7 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const div = document.createElement("div");
         div.classList.add("item");
 
-        div.style.backgroundImage = `url('${producto.imagen}')`;
+        const imagen = document.createElement("img");
+        imagen.src = producto.imagen;
 
         const nombreP = document.createElement("p");
         nombreP.textContent = `Comida: ${producto.nombre}`;
@@ -43,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const agregarCarritoBtn = document.createElement("button");
         agregarCarritoBtn.textContent = "Agregar al carrito";
 
+        div.appendChild(imagen);
         div.appendChild(nombreP);
         div.appendChild(precioP);
         div.appendChild(sumarBtn);
@@ -63,13 +72,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         agregarCarritoBtn.addEventListener("click", () => {
             const cantidad = parseInt(cantidadInput.value);
-            if (cantidad > 0) {
+            if (cantidad > 0 && producto.disponible) {
+                const metodoPago = metodoPagoSelect.value;
+                let precioProducto = producto.precio;
+
+                // Aplica un recargo del 10% si se paga con tarjeta
+                if (metodoPago === "tarjeta") {
+                    precioProducto += precioProducto * 0.10; // Agrega el 10% al precio
+                }
+
+                const totalProducto = precioProducto * cantidad;
+
                 const comida = producto.nombre;
                 const listItem = document.createElement("li");
                 const cantidadItem = document.createElement("span");
-                cantidadItem.textContent = `${cantidad} ${comida}(s) - $${(producto.precio * cantidad).toFixed(2)}`;
+                cantidadItem.textContent = `${cantidad} ${comida}(s) - $${totalProducto.toFixed(2)}`;
 
-                // Botones para modificar la cantidad en el carrito
                 const aumentarCantidadBtn = document.createElement("button");
                 aumentarCantidadBtn.textContent = "+";
                 const disminuirCantidadBtn = document.createElement("button");
@@ -77,10 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const eliminarBtn = document.createElement("button");
                 eliminarBtn.textContent = "x";
 
-                // Eventos para aumentar y disminuir la cantidad en el carrito
                 aumentarCantidadBtn.addEventListener("click", () => {
                     cantidadInput.value = parseInt(cantidadInput.value) + 1;
-                    cantidadItem.textContent = `${cantidadInput.value} ${comida}(s) - $${(producto.precio * parseInt(cantidadInput.value)).toFixed(2)}`;
+                    cantidadItem.textContent = `${cantidadInput.value} ${comida}(s) - $${(precioProducto * parseInt(cantidadInput.value)).toFixed(2)}`;
                     totalCompra = calcularTotalCompra();
                     actualizarTotal();
                 });
@@ -89,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const cantidad = parseInt(cantidadInput.value);
                     if (cantidad > 1) {
                         cantidadInput.value = cantidad - 1;
-                        cantidadItem.textContent = `${cantidadInput.value} ${comida}(s) - $${(producto.precio * parseInt(cantidadInput.value)).toFixed(2)}`;
+                        cantidadItem.textContent = `${cantidadInput.value} ${comida}(s) - $${(precioProducto * parseInt(cantidadInput.value)).toFixed(2)}`;
                         totalCompra = calcularTotalCompra();
                         actualizarTotal();
                     }
@@ -107,10 +124,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 listItem.appendChild(eliminarBtn);
                 itemsCarritoElement.appendChild(listItem);
 
-                totalCompra += producto.precio * cantidad;
+                totalCompra += totalProducto;
                 cantidadTotalItems += cantidad;
                 actualizarTotal();
                 cantidadInput.value = "0";
+
+                const carritoItem = { producto, cantidad, metodoPago };
+                carrito.push(carritoItem);
+                guardarCarritoEnLocalStorage();
+            } else {
+                alert("No se puede agregar el producto al carrito. Verifica la cantidad y la disponibilidad.");
             }
         });
 
@@ -136,18 +159,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostrarResumenCompra() {
         let descuento = 0;
-        if (cantidadTotalItems >= 10) {
-            descuento = totalCompra * 0.10;
+        if (cantidadTotalItems > 5 && metodoPagoSelect.value === "efectivo") {
+            descuento = totalCompra * 0.10; // Aplica un descuento del 10% si compra más de 5 productos y paga en efectivo
+        }
+
+        let recargo = 0;
+        if (metodoPagoSelect.value === "tarjeta") {
+            recargo = totalCompra * 0.10; // Aplica un recargo del 10% si paga con tarjeta
         }
 
         const resumenCompra = obtenerResumenCompra();
-        const totalConDescuento = (totalCompra - descuento).toFixed(2);
+        const totalConDescuento = (totalCompra - descuento + recargo).toFixed(2);
         const costoEnvío = cantidadTotalItems >= 10 ? "Gratis" : "$5.00";
 
         const ventanaEmergente = window.open("", "Resumen de Compra", "width=400,height=300");
         ventanaEmergente.document.write("<h1>Resumen de Compra</h1>");
         ventanaEmergente.document.write(resumenCompra);
         ventanaEmergente.document.write(`<p>Descuento: $${descuento.toFixed(2)}</p>`);
+        ventanaEmergente.document.write(`<p>Recargo: $${recargo.toFixed(2)}</p>`); // Muestra el recargo
         ventanaEmergente.document.write(`<p>Total con Descuento: $${totalConDescuento}</p>`);
         ventanaEmergente.document.write(`<p>Costo de Envío: ${costoEnvío}</p>`);
         ventanaEmergente.document.close();
