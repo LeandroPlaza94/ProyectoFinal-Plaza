@@ -17,9 +17,60 @@ header a{
 }
 header{
     background-color: black;
+    display: flex;
+    align-items: center;
+justify-content: space-around;
 }
 
-.productosContainer{
+.columna {
+    flex: 1; /* Distribuir el espacio de manera uniforme entre las columnas */
+    padding: 10px; /* Espacio entre las columnas */
+    box-sizing: border-box; /* Incluir el espacio en el tamaño total */
+    max-width: calc(50% - 20px); /* Establecer el ancho máximo de cada columna */
+    display: inline-block; /* Mostrar las columnas en línea para que se acomoden en dos columnas */
+    vertical-align: top; /* Alinear las columnas en la parte superior */
+}
+.items{
+    display: flex;
+    flex-wrap: wrap;
+}
+#productosContainer{
+    display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    justify-content: space-around;
+}
+
+#productosContainer .cantidadElement{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: .625rem;
+}
+
+#productosContainer button{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: .625rem;
+}
+
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-around;
+}
+
+footer a{
+    text-decoration: none;
+    color: black;
+    
+}
+
+footer{
+    background-color: grey;
 }
