@@ -74,3 +74,9 @@ footer a{
 footer{
     background-color: grey;
 }
+
+.finCompra{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
