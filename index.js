@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     ];
 
+
+    
     const productosContainer = document.getElementById("productosContainer");
     const itemsCarritoElement = document.getElementById("itemsCarrito");
     const totalCompraElement = document.getElementById("totalCompra");
@@ -73,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         imagenElement.src = imagen;
 
         const nombreP = document.createElement("p");
-        nombreP.textContent = `Comida: ${nombre}`;
+        nombreP.textContent = ` ${nombre}`;
 
         const precioP = document.createElement("p");
         precioP.textContent = `Precio: $${precio.toFixed(2)}`;
@@ -206,9 +208,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostrarResumenCompra() {
         let descuento = 0;
-        if ((cantidadTotalItems >= 5 || (cantidadTotalItems >= 10 && metodoPagoSelect.value === "tarjeta")) && metodoPagoSelect.value === "efectivo") {
-            descuento = totalCompra * 0.05;
-        }
+        if ((cantidadTotalItems >= 5 && metodoPagoSelect.value === "efectivo") ||
+        (cantidadTotalItems >= 10 && metodoPagoSelect.value === "tarjeta")) {
+        descuento = totalCompra * 0.05;
+    }
+    
 
         let recargo = 0;
         if (metodoPagoSelect.value === "tarjeta") {
