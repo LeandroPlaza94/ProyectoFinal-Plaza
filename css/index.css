@@ -3,14 +3,17 @@ h1{
     align-items: center;
     justify-content: center;
 }
-html{
-    background-color: aquamarine;
+
+
+main{
+    height: 100vh;
+    
+}
+img{
+    width: 15rem;
+    height: 15rem;
 }
 
-img{
-    width: 12.5rem;
-    height: 12.5rem;
-}
 
 header a{
     color: white;
@@ -21,25 +24,38 @@ header{
     align-items: center;
 justify-content: space-around;
 }
+.item {
+    display: flex;
+    align-items: center; 
+    border-style:outset;
+    border-color: black;
+  }
+
+.sumarBtn,
+.restarBtn {
+  padding: 5px 10px; 
+  margin-right: 10px; 
+}
 
 .columna {
-    flex: 1; /* Distribuir el espacio de manera uniforme entre las columnas */
-    padding: 10px; /* Espacio entre las columnas */
-    box-sizing: border-box; /* Incluir el espacio en el tamaño total */
-    max-width: calc(50% - 20px); /* Establecer el ancho máximo de cada columna */
-    display: inline-block; /* Mostrar las columnas en línea para que se acomoden en dos columnas */
-    vertical-align: top; /* Alinear las columnas en la parte superior */
+    flex: 1; 
+    padding: 10px; 
+    box-sizing: border-box; 
+    max-width: calc(50% - 20px); 
+    display: inline-block; 
+    vertical-align: top; /
 }
 .items{
     display: flex;
-    flex-wrap: wrap;
+  
 }
 #productosContainer{
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    background-color: rgb(70, 138, 194);
 }
 
 #productosContainer .cantidadElement{
@@ -48,6 +64,7 @@ justify-content: space-around;
     align-items: center;
     justify-content: center;
     margin: .625rem;
+
 }
 
 #productosContainer button{
@@ -80,3 +97,17 @@ footer{
     align-items: center;
     justify-content: center;
 }
+
+.item p{
+display: flex;
+align-items:center;
+justify-content: center;
+width: 12.5rem;
+font-style:oblique;
+}
+
+.cantidadElement{
+    display: flex;
+}
+
+

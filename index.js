@@ -42,8 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
             "precio": 2.49,
             "imagen": "https://images.pexels.com/photos/17650224/pexels-photo-17650224/free-photo-of-can-of-coca-cola.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             "disponible": true
-        },
-        // Agrega otros productos aquí
+        }
     ];
 
     const productosContainer = document.getElementById("productosContainer");
@@ -54,10 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalCompra = 0;
     let cantidadTotalItems = 0;
 
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+    let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
     // Función para guardar el carrito en localStorage
-    function guardarCarritoEnLocalStorage() {
+    function carritoStorage() {
         localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
@@ -66,18 +65,18 @@ document.addEventListener("DOMContentLoaded", () => {
         productosContainer.appendChild(productoElement);
     });
 
-    function crearProductoElement(producto) {
+    function crearProductoElement({ nombre, precio, imagen, disponible }) {
         const div = document.createElement("div");
         div.classList.add("item");
 
-        const imagen = document.createElement("img");
-        imagen.src = producto.imagen;
+        const imagenElement = document.createElement("img");
+        imagenElement.src = imagen;
 
         const nombreP = document.createElement("p");
-        nombreP.textContent = `Comida: ${producto.nombre}`;
+        nombreP.textContent = `Comida: ${nombre}`;
 
         const precioP = document.createElement("p");
-        precioP.textContent = `Precio: $${producto.precio.toFixed(2)}`;
+        precioP.textContent = `Precio: $${precio.toFixed(2)}`;
 
         const sumarBtn = document.createElement("button");
         sumarBtn.textContent = "+";
@@ -93,12 +92,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const agregarCarritoBtn = document.createElement("button");
         agregarCarritoBtn.textContent = "Agregar al carrito";
 
-        div.appendChild(imagen);
+        div.appendChild(imagenElement);
         div.appendChild(nombreP);
         div.appendChild(precioP);
         div.appendChild(sumarBtn);
-        div.appendChild(cantidadInput);
         div.appendChild(restarBtn);
+        div.appendChild(cantidadInput);
         div.appendChild(agregarCarritoBtn);
 
         sumarBtn.addEventListener("click", () => {
@@ -114,9 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         agregarCarritoBtn.addEventListener("click", () => {
             const cantidad = parseInt(cantidadInput.value);
-            if (cantidad > 0 && producto.disponible) {
+            if (cantidad > 0 && disponible) {
                 const metodoPago = metodoPagoSelect.value;
-                let precioProducto = producto.precio;
+                let precioProducto = precio;
 
                 if (metodoPago === "tarjeta") {
                     precioProducto += precioProducto * 0.10;
@@ -124,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const totalProducto = precioProducto * cantidad;
 
-                const comida = producto.nombre;
+                const comida = nombre;
                 const listItem = document.createElement("li");
                 const cantidadItem = document.createElement("span");
                 cantidadItem.textContent = `${cantidad} ${comida}(s) - $${totalProducto.toFixed(2)}`;
@@ -170,9 +169,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 actualizarTotal();
                 cantidadInput.value = "0";
 
-                const carritoItem = { producto, cantidad, metodoPago };
-                carrito.push(carritoItem);
-                guardarCarritoEnLocalStorage();
+                
+                const carritoItem = { ...producto, cantidad, metodoPago };
+
+                
+                const carritoCopia = [...carrito];
+                carritoCopia.push(carritoItem);
+
+                
+                carrito = carritoCopia;
+                carritoStorage();
             } else {
                 alert("No se puede agregar el producto al carrito. Verifica la cantidad y la disponibilidad.");
             }
@@ -200,8 +206,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostrarResumenCompra() {
         let descuento = 0;
-        if (cantidadTotalItems > 5 && metodoPagoSelect.value === "efectivo") {
-            descuento = totalCompra * 0.10;
+        if ((cantidadTotalItems >= 5 || (cantidadTotalItems >= 10 && metodoPagoSelect.value === "tarjeta")) && metodoPagoSelect.value === "efectivo") {
+            descuento = totalCompra * 0.05;
         }
 
         let recargo = 0;
@@ -235,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function mostrarProductos(productosMostrados) {
-        productosContainer.innerHTML = ""; // Elimina productos anteriores
+        productosContainer.innerHTML = ""; 
         productosMostrados.forEach(producto => {
             const productoElement = crearProductoElement(producto);
             productosContainer.appendChild(productoElement);
@@ -251,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mostrarProductos(productosMostrados);
     }
 
-    // Botones de filtrado
+
     const btnHamburguesa = document.getElementById("btnHamburguesa");
     const btnGaseosa = document.getElementById("btnGaseosa");
     const btnPapas = document.getElementById("btnPapas");
