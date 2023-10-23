@@ -1,55 +1,61 @@
+
+const productos = [
+    {
+        "nombre": "Hamburguesa Clásica",
+        "precio": 5.99,
+        "imagen": "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "disponible": true,
+        "categoria": "Hamburguesa"
+    },
+    {
+        "nombre": "Hamburguesa BBQ",
+        "precio": 6.99,
+        "imagen": "https://images.pexels.com/photos/3764353/pexels-photo-3764353.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "disponible": true,
+        "categoria": "Hamburguesa"
+    },
+    {
+        "nombre": "Hamburguesa Vegana",
+        "precio": 7.49,
+        "imagen": "https://images.pexels.com/photos/6546021/pexels-photo-6546021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "disponible": false,
+        "categoria": "Hamburguesa"
+    },
+    {
+        "nombre": "Papas cheddar-bacon",
+        "precio": 4.49,
+        "imagen": "https://images.pexels.com/photos/17035133/pexels-photo-17035133/free-photo-of-fries-in-melted-cheese.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "disponible": true,
+        "categoria": "Papas"
+    },
+    {
+        "nombre": "Papas Clasicas",
+        "precio": 3.49,
+        "imagen": "https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "disponible": true,
+        "categoria": "Papas"
+    },
+    {
+        "nombre": "Gaseosa Sprite",
+        "precio": 7.49,
+        "imagen": "https://images.pexels.com/photos/17650220/pexels-photo-17650220/free-photo-of-can-of-sprite-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "disponible": true,
+        "categoria": "Gaseosa"
+    },
+    {
+        "nombre": "Gaseosa Coca Cola",
+        "precio": 2.49,
+        "imagen": "https://images.pexels.com/photos/17650224/pexels-photo-17650224/free-photo-of-can-of-coca-cola.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+        "disponible": true,
+        "categoria": "Gaseosa"
+    }
+];
+
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
-    const productos = [
-        {
-            "nombre": "Hamburguesa Clásica",
-            "precio": 5.99,
-            "imagen": "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true,
-            "categoria": "Hamburguesa"
-        },
-        {
-            "nombre": "Hamburguesa BBQ",
-            "precio": 6.99,
-            "imagen": "https://images.pexels.com/photos/3764353/pexels-photo-3764353.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true,
-            "categoria": "Hamburguesa"
-        },
-        {
-            "nombre": "Hamburguesa Vegana",
-            "precio": 7.49,
-            "imagen": "https://images.pexels.com/photos/6546021/pexels-photo-6546021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": false,
-            "categoria": "Hamburguesa"
-        },
-        {
-            "nombre": "Papas cheddar-bacon",
-            "precio": 4.49,
-            "imagen": "https://images.pexels.com/photos/17035133/pexels-photo-17035133/free-photo-of-fries-in-melted-cheese.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true,
-            "categoria": "Papas"
-        },
-        {
-            "nombre": "Papas Clasicas",
-            "precio": 3.49,
-            "imagen": "https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true,
-            "categoria": "Papas"
-        },
-        {
-            "nombre": "Gaseosa Sprite",
-            "precio": 7.49,
-            "imagen": "https://images.pexels.com/photos/17650220/pexels-photo-17650220/free-photo-of-can-of-sprite-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true,
-            "categoria": "Gaseosa"
-        },
-        {
-            "nombre": "Gaseosa Coca Cola",
-            "precio": 2.49,
-            "imagen": "https://images.pexels.com/photos/17650224/pexels-photo-17650224/free-photo-of-can-of-coca-cola.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true,
-            "categoria": "Gaseosa"
-        }
-    ];
+
 
     const productosContainer = document.getElementById("productosContainer");
     const itemsCarritoElement = document.getElementById("itemsCarrito");
@@ -259,13 +265,13 @@ document.addEventListener("DOMContentLoaded", function() {
         return resumen;
     }
 
-    // Obtén los botones de filtro
+    // Botones de filtro
     const btnHamburguesa = document.getElementById("btnHamburguesa");
     const btnGaseosa = document.getElementById("btnGaseosa");
     const btnPapas = document.getElementById("btnPapas");
     const btnTodos = document.getElementById("btnTodos");
 
-    // Agrega manejadores de eventos para los botones de filtro
+
     btnHamburguesa.addEventListener("click", () => filtrarProductos("Hamburguesa"));
     btnGaseosa.addEventListener("click", () => filtrarProductos("Gaseosa"));
     btnPapas.addEventListener("click", () => filtrarProductos("Papas"));
