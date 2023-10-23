@@ -1,52 +1,56 @@
-document.addEventListener("DOMContentLoaded", () => {
-    // Define los productos en formato JSON y guárdalos en la constante "productos"
+document.addEventListener("DOMContentLoaded", function() {
     const productos = [
         {
             "nombre": "Hamburguesa Clásica",
             "precio": 5.99,
             "imagen": "https://images.pexels.com/photos/1639557/pexels-photo-1639557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true
+            "disponible": true,
+            "categoria": "Hamburguesa"
         },
         {
             "nombre": "Hamburguesa BBQ",
             "precio": 6.99,
             "imagen": "https://images.pexels.com/photos/3764353/pexels-photo-3764353.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true
+            "disponible": true,
+            "categoria": "Hamburguesa"
         },
         {
             "nombre": "Hamburguesa Vegana",
             "precio": 7.49,
             "imagen": "https://images.pexels.com/photos/6546021/pexels-photo-6546021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": false
+            "disponible": false,
+            "categoria": "Hamburguesa"
         },
         {
             "nombre": "Papas cheddar-bacon",
             "precio": 4.49,
             "imagen": "https://images.pexels.com/photos/17035133/pexels-photo-17035133/free-photo-of-fries-in-melted-cheese.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true
+            "disponible": true,
+            "categoria": "Papas"
         },
         {
             "nombre": "Papas Clasicas",
             "precio": 3.49,
             "imagen": "https://images.pexels.com/photos/1583884/pexels-photo-1583884.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true
+            "disponible": true,
+            "categoria": "Papas"
         },
         {
             "nombre": "Gaseosa Sprite",
             "precio": 7.49,
             "imagen": "https://images.pexels.com/photos/17650220/pexels-photo-17650220/free-photo-of-can-of-sprite-on-white-background.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true
+            "disponible": true,
+            "categoria": "Gaseosa"
         },
         {
             "nombre": "Gaseosa Coca Cola",
             "precio": 2.49,
             "imagen": "https://images.pexels.com/photos/17650224/pexels-photo-17650224/free-photo-of-can-of-coca-cola.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-            "disponible": true
+            "disponible": true,
+            "categoria": "Gaseosa"
         }
     ];
 
-
-    
     const productosContainer = document.getElementById("productosContainer");
     const itemsCarritoElement = document.getElementById("itemsCarrito");
     const totalCompraElement = document.getElementById("totalCompra");
@@ -62,17 +66,26 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
-    productos.forEach(producto => {
-        const productoElement = crearProductoElement(producto);
-        productosContainer.appendChild(productoElement);
-    });
+    // Función para cargar imágenes usando Fetch
+    function cargarImagenes() {
+        const promesasImagenes = productos.map(producto => {
+            return fetch(producto.imagen)
+                .then(response => response.blob())
+                .then(blob => {
+                    return URL.createObjectURL(blob);
+                });
+        });
 
-    function crearProductoElement({ nombre, precio, imagen, disponible }) {
+        return Promise.all(promesasImagenes);
+    }
+
+    // Función para crear elementos de productos
+    function crearProductoElement({ nombre, precio, imagen, disponible, categoria }, imagenUrl) {
         const div = document.createElement("div");
-        div.classList.add("item");
+        div.classList.add("item", categoria);
 
         const imagenElement = document.createElement("img");
-        imagenElement.src = imagen;
+        imagenElement.src = imagenUrl;
 
         const nombreP = document.createElement("p");
         nombreP.textContent = ` ${nombre}`;
@@ -171,14 +184,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 actualizarTotal();
                 cantidadInput.value = "0";
 
-                
                 const carritoItem = { ...producto, cantidad, metodoPago };
 
-                
                 const carritoCopia = [...carrito];
                 carritoCopia.push(carritoItem);
 
-                
                 carrito = carritoCopia;
                 carritoStorage();
             } else {
@@ -186,8 +196,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+    
         return div;
     }
+
+    cargarImagenes().then(imagenes => {
+        productos.forEach((producto, index) => {
+            const productoElement = crearProductoElement(producto, imagenes[index]);
+            productosContainer.appendChild(productoElement);
+        });
+    });
 
     function calcularTotalCompra() {
         let total = 0;
@@ -208,11 +226,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostrarResumenCompra() {
         let descuento = 0;
-        if ((cantidadTotalItems >= 5 && metodoPagoSelect.value === "efectivo") ||
-        (cantidadTotalItems >= 10 && metodoPagoSelect.value === "tarjeta")) {
-        descuento = totalCompra * 0.05;
-    }
-    
+        if ((cantidadTotalItems >= 5 && metodoPagoSelect.value === "efectivo") || (cantidadTotalItems >= 10 && metodoPagoSelect.value === "tarjeta")) {
+            descuento = totalCompra * 0.05;
+        }
 
         let recargo = 0;
         if (metodoPagoSelect.value === "tarjeta") {
@@ -223,14 +239,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const totalConDescuento = (totalCompra - descuento + recargo).toFixed(2);
         const costoEnvío = cantidadTotalItems >= 10 ? "Gratis" : "$5.00";
 
-        const ventanaEmergente = window.open("", "Resumen de Compra", "width=400,height=300");
-        ventanaEmergente.document.write("<h1 style='color: blue;'>Resumen de Compra</h1>");
-        ventanaEmergente.document.write(resumenCompra);
-        ventanaEmergente.document.write(`<p>Descuento: $${descuento.toFixed(2)}</p>`);
-        ventanaEmergente.document.write(`<p>Recargo: $${recargo.toFixed(2)}</p>`);
-        ventanaEmergente.document.write(`<p>Total con Descuento: $${totalConDescuento}</p>`);
-        ventanaEmergente.document.write(`<p> Costo de Envío: ${costoEnvío}</p>`);
-        ventanaEmergente.document.close();
+        // Mostrar el resumen de compra en un modal SweetAlert
+        Swal.fire({
+            icon: "info",
+            title: "Resumen de Compra",
+            html: resumenCompra + `<p>Descuento: $${descuento.toFixed(2)}</p><p>Recargo: $${recargo.toFixed(2)}</p><p>Total con Descuento: $${totalConDescuento}</p><p>Costo de Envío: ${costoEnvío}</p>`,
+        });
     }
 
     function obtenerResumenCompra() {
@@ -244,42 +258,27 @@ document.addEventListener("DOMContentLoaded", () => {
         return resumen;
     }
 
-    function mostrarProductos(productosMostrados) {
-        productosContainer.innerHTML = ""; 
-        productosMostrados.forEach(producto => {
-            const productoElement = crearProductoElement(producto);
-            productosContainer.appendChild(productoElement);
-        });
-    }
-
-    mostrarProductos(productos);
-
-    function filtrarProductosPorNombre(nombre) {
-        const productosMostrados = productos.filter(producto =>
-            producto.nombre.toLowerCase().includes(nombre.toLowerCase())
-        );
-        mostrarProductos(productosMostrados);
-    }
-
-
+    // Obtén los botones de filtro
     const btnHamburguesa = document.getElementById("btnHamburguesa");
     const btnGaseosa = document.getElementById("btnGaseosa");
     const btnPapas = document.getElementById("btnPapas");
     const btnTodos = document.getElementById("btnTodos");
 
-    btnHamburguesa.addEventListener("click", () => {
-        filtrarProductosPorNombre("Hamburguesa");
-    });
+    // Agrega manejadores de eventos para los botones de filtro
+    btnHamburguesa.addEventListener("click", () => filtrarProductos("Hamburguesa"));
+    btnGaseosa.addEventListener("click", () => filtrarProductos("Gaseosa"));
+    btnPapas.addEventListener("click", () => filtrarProductos("Papas"));
+    btnTodos.addEventListener("click", () => filtrarProductos("Todos"));
 
-    btnGaseosa.addEventListener("click", () => {
-        filtrarProductosPorNombre("Gaseosa");
-    });
-
-    btnPapas.addEventListener("click", () => {
-        filtrarProductosPorNombre("Papas");
-    });
-
-    btnTodos.addEventListener("click", () => {
-        mostrarProductos(productos);
-    });
+    function filtrarProductos(categoria) {
+        // Muestra u oculta elementos según la categoría seleccionada
+        const items = productosContainer.querySelectorAll(".item");
+        items.forEach(item => {
+            if (categoria === "Todos" || item.classList.contains(categoria)) {
+                item.style.display = "block";
+            } else {
+                item.style.display = "none";
+            }
+        });
+    }
 });
