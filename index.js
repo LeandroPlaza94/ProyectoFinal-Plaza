@@ -80,7 +80,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Función para crear elementos de productos
-    function crearProductoElement({ nombre, precio, imagen, disponible, categoria }, imagenUrl) {
+    function crearProductoElement(producto, imagenUrl) {
+        const { nombre, precio, imagen, disponible, categoria } = producto;
+
         const div = document.createElement("div");
         div.classList.add("item", categoria);
 
@@ -196,7 +198,6 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
-    
         return div;
     }
 
@@ -276,8 +277,7 @@ document.addEventListener("DOMContentLoaded", function() {
         items.forEach(item => {
             if (categoria === "Todos" || item.classList.contains(categoria)) {
                 item.style.display = "block";
-            } else {
-                item.style.display = "none";
+            } else {item.style.display = "none";
             }
         });
     }
